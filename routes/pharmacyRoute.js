@@ -23,7 +23,6 @@ router.patch(
   updatePictures
 )
 
-router.get('/', pharmacyAuthentication, getMe)
 router.get('/:lat/:lng', getAllpharmacies)
 router.get('/:id', getPharmacy)
 router.put('/', pharmacyAuthentication, updatePharmacy)

@@ -2,6 +2,12 @@ module.exports = (sequelize, DataTypes) => {
   const Customer = sequelize.define(
     'Customer',
     {
+      id:{
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -35,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       underscored: true,
+      timestamps: false,
     }
   )
 
@@ -63,12 +70,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     })
-    Customer.hasMany(models.History, {
-      foreignKey: {
-        name: 'customerId',
-        allowNull: false,
-      },
-    })
+  
     Customer.hasMany(models.Review, {
       foreignKey: {
         name: 'customerId',

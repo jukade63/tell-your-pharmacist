@@ -47,18 +47,18 @@ exports.getPharmacy = async (req, res, next) => {
   }
 }
 
-exports.getMe = async (req, res, next) => {
-  try {
-    const user = await Pharmacy.findOne({ where: { id: req.user.id } })
-    if (!user) {
-      createError('user not found', 400)
-    }
+// exports.getMe = async (req, res, next) => {
+//   try {
+//     const user = await Pharmacy.findOne({ where: { id: req.user.id } })
+//     if (!user) {
+//       createError('user not found', 400)
+//     }
 
-    res.status(200).json({ user })
-  } catch (error) {
-    next(error)
-  }
-}
+//     res.status(200).json({ user })
+//   } catch (error) {
+//     next(error)
+//   }
+// }
 
 exports.addOpeningTime = async (req, res, next) => {
   try {

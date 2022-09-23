@@ -6,6 +6,7 @@ const {
   addAddress,
   updateAddress,
   deleteAddress,
+  getMe,
 } = require('../controllers/customerController')
 const {
   customerAuthentication,
@@ -14,6 +15,7 @@ const {
 
 const router = express.Router()
 
+router.get('/me', customerAuthentication, getMe)
 router.post('/healthInfo', customerAuthentication, createHealthInfo)
 router.put('/healthInfo/:id', customerAuthentication, updateHealthInfo)
 router.get('/healthInfo/:customerId', pharmacyAuthentication, getHealthInfo)

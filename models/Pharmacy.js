@@ -4,6 +4,12 @@ module.exports = (sequelize, DataTypes) => {
   const Pharmacy = sequelize.define(
     'Pharmacy',
     {
+      id:{
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -52,6 +58,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       underscored: true,
+      timestamps: false,
     }
   )
 
@@ -80,12 +87,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     })
-    Pharmacy.hasMany(models.History, {
-      foreignKey: {
-        name: 'pharmacyId',
-        allowNull: false,
-      },
-    })
+ 
     Pharmacy.hasMany(models.Review, {
       foreignKey: {
         name: 'pharmacyId',

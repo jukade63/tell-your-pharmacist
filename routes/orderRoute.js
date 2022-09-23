@@ -5,7 +5,8 @@ const {
   cancelOrder,
   completedOrder,
   paidOrder,
-  getOrder,
+  getOrdersFromCustomer,
+  getOrdersFromPharmacy,
 } = require('../controllers/orderController')
 const {
   pharmacyAuthentication,
@@ -14,7 +15,8 @@ const {
 const router = express.Router()
 
 router.post('/', pharmacyAuthentication, createOrder)
-router.get('/:pharmacyId', customerAuthentication, getOrder)
+router.get('/', customerAuthentication, getOrdersFromCustomer)
+router.get('/pharmacy', pharmacyAuthentication, getOrdersFromPharmacy)
 router.patch('/paid/:orderId', customerAuthentication, paidOrder)
 router.patch('/deliver/:orderId', customerAuthentication, deliveringOrder)
 router.patch('/cancel/:orderId', customerAuthentication, cancelOrder)

@@ -11,6 +11,7 @@ const orderRoute = require('./routes/orderRoute')
 const customerRoute = require('./routes/customerRoute')
 const pharmacyRoute = require('./routes/pharmacyRoute')
 const orderDetailRoute = require('./routes/orderDetailRoute')
+const userRoute = require('./routes/userRoute')
 const notFound = require('./middlewares/notFound')
 const error = require('./middlewares/error')
 
@@ -27,14 +28,19 @@ app.use('/contacts', contactRoute)
 app.use('/chats', chatRoute)
 app.use('/customerAuth', authCustomerRoute)
 app.use('/pharmacyAuth', authPharmacyRoute)
+app.use('/users', userRoute)
+
 app.use('/products', productRoute)
 
 app.use(notFound)
 app.use(error)
 
-// sequelize.sync({ alter: true })
+
+// sequelize.sync({force: true})
+
 
 const port = process.env.PORT || 5000
 app.listen(port, () => {
-  console.log('listening to port ' + port)
+    console.log('listening to port ' + port)
+  
 })

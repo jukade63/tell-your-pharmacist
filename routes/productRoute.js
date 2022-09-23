@@ -4,13 +4,15 @@ const {
   addProduct,
   updateProduct,
   deleteProduct,
+  getProductByName,
 } = require('../controllers/productController')
 const { pharmacyAuthentication } = require('../middlewares/authentication')
 
 const router = express.Router()
 
 router.get('/', pharmacyAuthentication, getProducts)
-router.post('/', pharmacyAuthentication, addProduct)
+// router.get('/one', pharmacyAuthentication, getProductByName)
+// router.post('/', pharmacyAuthentication, addProduct)
 router.put('/:id', pharmacyAuthentication, updateProduct)
 router.delete('/:id', pharmacyAuthentication, deleteProduct)
 

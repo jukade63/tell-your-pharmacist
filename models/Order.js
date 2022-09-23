@@ -2,6 +2,12 @@ module.exports = (sequelize, DataTypes) => {
   const Order = sequelize.define(
     'Order',
     {
+      id:{
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
       status: DataTypes.ENUM(
         'PENDING',
         'PAID',
@@ -9,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
         'CANCELLED',
         'COMPLETED'
       ),
+      deliveryFee: DataTypes.STRING,
     },
+
     {
       underscored: true,
     }

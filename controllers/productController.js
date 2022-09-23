@@ -12,31 +12,43 @@ exports.getProducts = async (req, res, next) => {
     next(error)
   }
 }
-
-exports.addProduct = async (req, res, next) => {
+exports.getProductByName = async (req,res,next)=>{
+  const {name} = req.body
   try {
-    const { name, quantity, price } = req.body
-    if (name === '') {
-      createError('name is required', 400)
+    const product = Product.findOne({where: {name}})
+    if(!product){
+      createError('Product not found', 400)
     }
-    if (quantity === '') {
-      createError('quantity is required', 400)
-    }
-    if (name === '') {
-      createError('price is required', 400)
-    }
-    const product = await Product.create({
-      name,
-      quantity,
-      price,
-      pharmacyId: req.user.id,
-    })
-
-    res.status(201).json({ product })
+    res.status(200).json({product})
   } catch (error) {
     next(error)
   }
 }
+
+// exports.addProduct = async (req, res, next) => {
+//   try {
+//     const { name, quantity, price } = req.body
+//     if (name === '') {
+//       createError('name is required', 400)
+//     }
+//     if (quantity === '') {
+//       createError('quantity is required', 400)
+//     }
+//     if (name === '') {
+//       createError('price is required', 400)
+//     }
+//     const product = await Product.create({
+//       name,
+//       quantity,
+//       price,
+//       pharmacyId: req.user.id,
+//     })
+
+//     res.status(201).json({ product })
+//   } catch (error) {
+//     next(error)
+//   }
+// }
 
 exports.updateProduct = async (req, res, next) => {
   try {

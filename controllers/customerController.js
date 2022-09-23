@@ -1,5 +1,19 @@
-const { HealthInfo, Address } = require('../models')
+const { HealthInfo, Address, Customer } = require('../models')
 const createError = require('../utils/createError')
+
+
+exports.getMe = async (req, res, next) => {
+  try {
+    const user = await Customer.findOne({ where: { id: req.user.id } })
+    if (!user) {
+      createError('user not found', 400)
+    }
+
+    res.status(200).json({ user })
+  } catch (error) {
+    next(error)
+  }
+}
 
 exports.createHealthInfo = async (req, res, next) => {
   try {

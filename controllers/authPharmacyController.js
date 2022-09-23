@@ -43,19 +43,19 @@ exports.signup = async (req, res, next) => {
     } = req.body
 
     const existingPharmacy = await Pharmacy.findOne({ where: { phoneNumber } })
-    const registerdPharmacies = await Pharmacy.findAll()
+    // const registerdPharmacies = await Pharmacy.findAll()
 
     if (existingPharmacy) {
       createError('Phone number already in-use', 400)
     }
 
-    if (registerdPharmacies) {
-      registerdPharmacies.forEach((p) => {
-        if (p.storeName === storeName) {
-          createError('Store name is already used')
-        }
-      })
-    }
+    // if (registerdPharmacies) {
+    //   registerdPharmacies.forEach((p) => {
+    //     if (p.storeName === storeName) {
+    //       createError('Store name is already used')
+    //     }
+    //   })
+    // }
     if (!phoneNumber) {
       createError('Phone number is required', 400)
     }
