@@ -1,51 +1,54 @@
 module.exports = (sequelize, DataTypes) => {
   const Order = sequelize.define(
-    'Order',
+    "Order",
     {
-      id:{
+      id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
       },
-      status: DataTypes.ENUM(
-        'PENDING',
-        'PAID',
-        'DELIVERING',
-        'CANCELLED',
-        'COMPLETED'
-      ),
+      status: {
+        type: DataTypes.ENUM(
+          "PENDING",
+          "PAID",
+          "DELIVERING",
+          "CANCELLED",
+          "COMPLETED"
+        ),
+        defaultValue: "PENDING",
+      },
       deliveryFee: DataTypes.STRING,
     },
 
     {
       underscored: true,
     }
-  )
+  );
 
   Order.associate = (models) => {
     Order.belongsTo(models.Customer, {
       foreignKey: {
-        name: 'customerId',
+        name: "customerId",
         allowNull: false,
       },
-      onDelete: 'CASCADE',
-    })
+      onDelete: "CASCADE",
+    });
     Order.belongsTo(models.Pharmacy, {
       foreignKey: {
-        name: 'pharmacyId',
+        name: "pharmacyId",
         allowNull: false,
       },
-      onDelete: 'CASCADE',
-    })
+      onDelete: "CASCADE",
+    });
     Order.hasMany(models.OrderDetail, {
       foreignKey: {
-        name: 'orderId',
+        name: "orderId",
         allowNull: false,
       },
-      onDelete: 'CASCADE',
-    })
-  }
+      onDelete: "CASCADE",
+    });
+  };
 
-  return Order
-}
+  return Order;
+};

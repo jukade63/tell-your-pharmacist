@@ -15,7 +15,7 @@ exports.userAuthentication = async (req, res, next) => {
       createError("you are not authorized");
     }
 
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const customer = await Customer.findOne({
       where: { id: payload.id },
       attributes: {
@@ -56,7 +56,7 @@ exports.pharmacyAuthentication = async (req, res, next) => {
       createError("you are not authorized");
     }
 
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const pharmacy = await Pharmacy.findOne({
       where: { id: payload.id },
       attributes: {
@@ -87,7 +87,7 @@ exports.customerAuthentication = async (req, res, next) => {
       createError("you are not authorized");
     }
 
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const customer = await Customer.findOne({
       where: { id: payload.id },
       attributes: {
@@ -118,7 +118,7 @@ exports.pharmacyAuthentication = async (req, res, next) => {
       createError("you are not authorized");
     }
 
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const pharmacy = await Pharmacy.findOne({
       where: { id: payload.id },
       attributes: {

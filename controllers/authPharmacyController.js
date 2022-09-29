@@ -10,13 +10,13 @@ exports.login = async (req, res, next) => {
     const pharmacy = await Pharmacy.findOne({ where: { phoneNumber } })
 
     if (!pharmacy) {
-      createError('Invalid credential', 400)
+      createError('ชื่อหรือรหัสผ่านไม่ถูกต้อง', 400)
     }
 
     const isMatch = await bcrypt.compare(password, pharmacy.password)
 
     if (!isMatch) {
-      createError('Invalid credential', 400)
+      createError('ชื่อหรือรหัสผ่านไม่ถูกต้อง', 400)
     }
 
     const token = jwt.sign({ id: pharmacy.id }, 'secret_key', {

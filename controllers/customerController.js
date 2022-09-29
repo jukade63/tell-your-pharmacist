@@ -1,148 +1,179 @@
-const { HealthInfo, Address, Customer } = require('../models')
-const createError = require('../utils/createError')
+const { HealthInfo, Address, Customer } = require("../models");
+const createError = require("../utils/createError");
+const cloudinary = require('../utils/cloudinary')
 
 
 exports.getMe = async (req, res, next) => {
   try {
-    const user = await Customer.findOne({ where: { id: req.user.id } })
+    const user = await Customer.findOne({ where: { id: req.user.id } });
     if (!user) {
-      createError('user not found', 400)
+      createError("user not found", 400);
     }
 
-    res.status(200).json({ user })
+    res.status(200).json({ user });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
-exports.createHealthInfo = async (req, res, next) => {
+exports.getCustomerById = async (req,res,next)=>{
   try {
-    const { age, weight, height, allergy, diseases, medication } = req.body
-    const healthInfo = await HealthInfo.create({
-      age,
-      weight,
-      height,
-      allergy,
-      diseases,
-      medication,
-      customerId: req.customer.id,
-    })
-
-    if (!healthInfo) {
-      createError('failed adding health info', 400)
+    const {id} = req.params
+    const customer = await Customer.findOne({where: {id}})
+    if(!customer){
+      createError('customer not found', 400)
     }
-
-    res.status(201).json({ healthInfo })
+    res.status(200).json({customer})
   } catch (error) {
     next(error)
   }
 }
+
 
 exports.getHealthInfo = async (req, res, next) => {
   try {
-    const { id } = req.params
-    const healthInfo = await HealthInfo.findOne({ where: { customerId: id } })
+    const healthInfo = await HealthInfo.findOne({ where: { customerId: req.user.id} });
 
     if (!healthInfo) {
-      createError('failed adding helth info', 400)
+      createError("Health information not found", 400);
     }
 
-    res.status(201).json({ healthInfo })
+    res.status(201).json({ healthInfo });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+exports.getHealthInfoById = async (req, res, next) => {
+  try {
+    const {customerId} = req.params
+    const healthInfo = await HealthInfo.findOne({ where: { customerId} });
+
+    if (!healthInfo) {
+      createError("Health information not found", 400);
+    }
+
+    res.status(201).json({ healthInfo });
+  } catch (error) {
+    next(error);
+  }
+};
 
 exports.updateHealthInfo = async (req, res, next) => {
   try {
-    const { age, weight, height, allergy, diseases, medication } = req.body
+    const { age, weight, height, allergy, diseases, medication } = req.body;
     const healthInfo = await HealthInfo.findOne({
       where: { customerId: req.user.id },
-    })
+    });
 
-    healthInfo.age = age
-    healthInfo.weight = weight
-    healthInfo.height = height
-    healthInfo.allergy = allergy
-    healthInfo.diseases = diseases
-    healthInfo.medication = medication
+    healthInfo.age = age;
+    healthInfo.weight = weight;
+    healthInfo.height = height;
+    healthInfo.allergy = allergy;
+    healthInfo.diseases = diseases;
+    healthInfo.medication = medication;
 
-    healthInfo.save()
+    healthInfo.save();
 
-    res.status(200).json({ healthInfo })
+    res.status(200).json({ healthInfo });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 exports.addAddress = async (req, res, next) => {
   try {
-    const { latitude, longitude } = req.body
+    const { latitude, longitude } = req.body;
     const address = await Address.create({
       latitude,
       longitude,
       customerId: req.user.id,
-    })
+    });
     if (!address) {
-      createError('faild to add the address', 400)
+      createError("faild to add the address", 400);
     }
 
-    req.status(201).json({ address })
+    req.status(201).json({ address });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 exports.getAddresses = async (req, res, next) => {
   try {
     const address = await Address.findOne({
       where: { customerId: req.user.id },
-    })
+    });
     if (!address) {
-      createError('faild to get the address', 400)
+      createError("faild to get the address", 400);
     }
 
-    req.status(201).json({ address })
+    req.status(201).json({ address });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 exports.updateAddress = async (req, res, next) => {
   try {
-    const { id } = req.params
-    const { latitude, longitude } = req.body
+    const { id } = req.params;
+    const { latitude, longitude } = req.body;
     const address = await Address.findOne({
       where: { id, customerId: req.user.id },
-    })
+    });
 
     if (!address) {
-      createError('faild to get the address', 400)
+      createError("faild to get the address", 400);
     }
-    address.latitude = latitude
-    address.longitude = longitude
+    address.latitude = latitude;
+    address.longitude = longitude;
 
-    address.save()
-    req.status(201).json({ address })
+    address.save();
+    req.status(201).json({ address });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 exports.deleteAddress = async (req, res, next) => {
   try {
-    const { id } = req.params
+    const { id } = req.params;
     const address = await Address.findOne({
       where: { id, customerId: req.user.id },
-    })
+    });
 
     if (!address) {
-      createError('faild to get the address', 400)
+      createError("faild to get the address", 400);
     }
 
-    address.destroy()
-    req.status(204).json()
+    address.destroy();
+    req.status(204).json();
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+exports.updateProfilePicture = async (req, res, next) => {
+  try {
+    if (!req.files.profilePic) {
+      createError("profilePic is required", 400);
+    }
+  
+    let updatedProfilePic;
+    if (req.files.profilePic) {
+      const result = await cloudinary.upload(req.files.profilePic[0].path);
+      if (req.user.profilePic) {
+        const splitted = req.user.profilePic.split("/");
+        const publicId = splitted[splitted.length - 1].split(".")[0];
+        await cloudinary.destroy(publicId);
+      }
+      updatedProfilePic = result.secure_url;
+    }
+
+    await Customer.update(
+      { profilePic: updatedProfilePic },
+      { where: { id: req.user.id } }
+    );
+    res.json(updatedProfilePic);
+  } catch(err) {
+    next(err);
+  }
+};

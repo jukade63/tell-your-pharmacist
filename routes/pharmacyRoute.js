@@ -14,7 +14,6 @@ const router = express.Router()
 
 router.patch(
   '/upload',
-  // upload.single('profilePic'),
   pharmacyAuthentication,
   upload.fields([
     { name: 'profilePic', maxCount: 1 },

@@ -12,6 +12,7 @@ const customerRoute = require('./routes/customerRoute')
 const pharmacyRoute = require('./routes/pharmacyRoute')
 const orderDetailRoute = require('./routes/orderDetailRoute')
 const userRoute = require('./routes/userRoute')
+const stripeRoute = require('./routes/stripeRoute')
 const notFound = require('./middlewares/notFound')
 const error = require('./middlewares/error')
 
@@ -29,6 +30,7 @@ app.use('/chats', chatRoute)
 app.use('/customerAuth', authCustomerRoute)
 app.use('/pharmacyAuth', authPharmacyRoute)
 app.use('/users', userRoute)
+app.use('/payments', stripeRoute)
 
 app.use('/products', productRoute)
 

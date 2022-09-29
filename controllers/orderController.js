@@ -1,11 +1,32 @@
-const { Order, OrderDetail, Product, Pharmacy, Customer } = require("../models");
+const {
+  Order,
+  OrderDetail,
+  Product,
+  Pharmacy,
+  Customer,
+} = require("../models");
 const createError = require("../utils/createError");
+const sequelize = require("sequelize");
 
 exports.getOrdersFromCustomer = async (req, res, next) => {
   try {
     const orders = await Order.findAll({
       where: { customerId: req.user.id },
-      include: [{model: Pharmacy}],
+      include: [{ model: Pharmacy }],
+      order: [
+        [
+          sequelize.fn(
+            "field",
+            sequelize.col("status"),
+            "PENDING",
+            "PAID",
+            "DELIVERING",
+            "CANCELLED",
+            "COMPLETED"
+          ),
+        ],
+        ["createdAt", "DESC"],
+      ],
     });
     if (!orders) {
       createError("order is not found", 400);
@@ -21,8 +42,7 @@ exports.getOrdersFromPharmacy = async (req, res, next) => {
   try {
     const orders = await Order.findOne({
       where: { pharmacyId: req.user.id },
-      include: [{model: Customer}],
-      
+      include: [{ model: Customer }],
     });
     if (!orders) {
       createError("order is not found", 400);
@@ -33,17 +53,35 @@ exports.getOrdersFromPharmacy = async (req, res, next) => {
   }
 };
 
-
+exports.getOrderById = async (req,res,next)=>{
+  try {
+    const {id} = req.params
+    const order = await Order.findOne({where: {id}})
+    if(!order){
+      createError('order not found', 400)
+    }
+    res.status(200).json({order})
+  } catch (error) {
+    next(error)
+  }
+}
 
 exports.createOrder = async (req, res, next) => {
   try {
-    const { customerId, orderDetails, deliveryFee } = req.body;
+    const { customerId, orderDetails, status, deliveryFee } = req.body;
     const { id } = req.user;
+
+    if (!customerId) {
+      createError("กรุณาเลือกลูกค้า", 400);
+    }
+    if (!orderDetails || orderDetails.length === 0) {
+      createError("กรุณาเพิ่มรายการยา", 400);
+    }
     const order = await Order.create({
-      status: "PENDING",
+      status,
       pharmacyId: id,
       customerId,
-      deliveryFee
+      deliveryFee,
     });
 
     if (order) {
@@ -83,17 +121,18 @@ exports.cancelOrder = async (req, res, next) => {
 
 exports.paidOrder = async (req, res, next) => {
   try {
-    const { orderId } = req.params;
-    const order = Order.findOne({
-      where: { orderId, status: "PENDING" },
-    });
+    const { id } = req.params;
+    const order = await Order.update(
+      { status: "PAID" },
+      {
+        where: { id },
+      }
+    );
     if (!order) {
       createError("order not found", 400);
     }
 
-    order.status = "PAID";
-    await order.save();
-    res.json({ message: "order has been paid" });
+    res.status(200).json({order});
   } catch (error) {
     next(error);
   }
@@ -101,9 +140,9 @@ exports.paidOrder = async (req, res, next) => {
 
 exports.deliveringOrder = async (req, res, next) => {
   try {
-    const { orderId } = req.params;
-    const order = Order.findOne({
-      where: { orderId, status: "PAID" },
+    const { id } = req.params;
+    const order = await Order.findOne({
+      where: { id, status: "PAID" },
     });
     if (!order) {
       createError("order not found", 400);
@@ -119,9 +158,9 @@ exports.deliveringOrder = async (req, res, next) => {
 
 exports.completedOrder = async (req, res, next) => {
   try {
-    const { orderId } = req.params;
-    const order = Order.findOne({
-      where: { orderId, status: "DELIVERING" },
+    const { id } = req.params;
+    const order = await Order.findOne({
+      where: { id, status: "DELIVERING" },
     });
     if (!order) {
       createError("order not found", 400);
