@@ -1,4 +1,5 @@
 require('dotenv').config()
+const path = require('path')
 const { sequelize } = require('./models')
 const express = require('express')
 const cors = require('cors')
@@ -19,12 +20,8 @@ const notFound = require('./middlewares/notFound')
 const error = require('./middlewares/error')
 
 const app = express()
-app.use((req,res,next)=>{
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    next()
-})
-// app.use(cors())
+
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
@@ -41,6 +38,11 @@ app.use('/payments', stripeRoute)
 app.use('/products', productRoute)
 app.use('/reviews', reviewRoute)
 app.use('/openingTime', openingTimeRoute)
+
+app.use(express.static(path.join(__dirname, '/client')))
+app.get('*', (req,res)=>{
+    res.sendFile(path.join(__dirname, '/client/dist', 'index.html'))
+})
 
 app.use(notFound)
 app.use(error)
