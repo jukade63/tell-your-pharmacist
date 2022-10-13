@@ -45,9 +45,6 @@ if (process.env.NODE_ENV === "production") {
     });
   }
 
-app.use(notFound)
-app.use(error)
-
 app.use(notFound);
 app.use(error);
 
