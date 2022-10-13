@@ -13,25 +13,24 @@ const {
 const {
   customerAuthentication,
   pharmacyAuthentication,
+  userAuthentication,
 } = require("../middlewares/authentication");
 const { upload } = require("../middlewares/upload");
 
 const router = express.Router();
 
-router.get("/me", customerAuthentication, getMe);
-router.get('/:id', getCustomerById)
+router.get("/", userAuthentication, getMe);
+router.get('/customer/:id', userAuthentication, getCustomerById)
+router.get("/healthInfo", userAuthentication, getHealthInfo);
 router.patch(
   "/upload",
   customerAuthentication,
   upload.fields([{ name: "profilePic", maxCount: 1 }]),
   updateProfilePicture
 );
+router.get("/healthInfo/:customerId", pharmacyAuthentication, getHealthInfoById);
 router.put("/healthInfo", customerAuthentication, updateHealthInfo);
 router.put("/healthInfo/:id", customerAuthentication, updateHealthInfo);
-router.get("/healthInfo/:customerId", pharmacyAuthentication, getHealthInfoById);
-router.get("/healthInfo", customerAuthentication, getHealthInfo);
-router.post("/address", customerAuthentication, addAddress);
-router.put("/address/:id", customerAuthentication, updateAddress);
-router.delete("/address/:id", customerAuthentication, deleteAddress);
+router.patch("/address/update", customerAuthentication, updateAddress);
 
 module.exports = router;

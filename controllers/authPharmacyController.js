@@ -1,4 +1,4 @@
-const { Pharmacy } = require('../models')
+const { Pharmacy, OpeningTime } = require('../models')
 const createError = require('../utils/createError')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -43,19 +43,11 @@ exports.signup = async (req, res, next) => {
     } = req.body
 
     const existingPharmacy = await Pharmacy.findOne({ where: { phoneNumber } })
-    // const registerdPharmacies = await Pharmacy.findAll()
 
     if (existingPharmacy) {
       createError('Phone number already in-use', 400)
     }
 
-    // if (registerdPharmacies) {
-    //   registerdPharmacies.forEach((p) => {
-    //     if (p.storeName === storeName) {
-    //       createError('Store name is already used')
-    //     }
-    //   })
-    // }
     if (!phoneNumber) {
       createError('Phone number is required', 400)
     }
@@ -84,6 +76,15 @@ exports.signup = async (req, res, next) => {
       latitude,
       longitude,
     })
+
+    if(pharmacy){
+      try {
+        await OpeningTime.create({pharmacyId: pharmacy.id})
+      } catch (error) {
+        next(error)
+      }
+
+    }
 
     const token = jwt.sign({ id: pharmacy.id }, 'secret_key', {
       expiresIn: '30d',

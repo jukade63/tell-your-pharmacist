@@ -2,13 +2,25 @@ module.exports = (sequelize, DataTypes) => {
   const OpeningTime = sequelize.define(
     'OpeningTime',
     {
-      dayStart: DataTypes.STRING,
+      dayStart: {
+        type: DataTypes.STRING,
+        defaultValue: 'จันทร์'
+      },
 
-      dayEnd: DataTypes.STRING,
+      dayEnd: {
+        type: DataTypes.STRING,
+        defaultValue: 'ศุกร์'
+      },
 
-      timeStart: DataTypes.TIME,
+      timeStart: {
+        type: DataTypes.TIME,
+        defaultValue: '08:00:00'
+      },
 
-      timeEnd: DataTypes.TIME,
+      timeEnd: {
+        type: DataTypes.TIME,
+        defaultValue: '20:00:00'
+      },
     },
     {
       underscored: true,

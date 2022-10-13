@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Customer = sequelize.define(
-    'Customer',
+    "Customer",
     {
-      id:{
+      id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
       },
       firstName: {
         type: DataTypes.STRING,
@@ -38,46 +38,48 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       profilePic: DataTypes.STRING,
+      address: DataTypes.STRING,
     },
+
     {
       underscored: true,
       timestamps: false,
     }
-  )
+  );
 
   Customer.associate = (models) => {
     Customer.hasOne(models.HealthInfo, {
       foreignKey: {
-        name: 'customerId',
+        name: "customerId",
         allowNull: false,
       },
-    })
+    });
     Customer.hasMany(models.Contact, {
       foreignKey: {
-        name: 'customerId',
+        name: "customerId",
         allowNull: false,
       },
-    })
+    });
     Customer.hasMany(models.Address, {
       foreignKey: {
-        name: 'customerId',
+        name: "customerId",
         allowNull: false,
       },
-    })
+    });
     Customer.hasMany(models.Order, {
       foreignKey: {
-        name: 'customerId',
+        name: "customerId",
         allowNull: false,
       },
-    })
-  
+    });
+
     Customer.hasMany(models.Review, {
       foreignKey: {
-        name: 'customerId',
+        name: "customerId",
         allowNull: false,
       },
-    })
-  }
+    });
+  };
 
-  return Customer
-}
+  return Customer;
+};

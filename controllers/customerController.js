@@ -5,12 +5,25 @@ const cloudinary = require('../utils/cloudinary')
 
 exports.getMe = async (req, res, next) => {
   try {
-    const user = await Customer.findOne({ where: { id: req.user.id } });
-    if (!user) {
+    const customer = await Customer.findOne({ where: { id: req.user.id } });
+    if (!customer) {
       createError("user not found", 400);
     }
 
-    res.status(200).json({ user });
+    res.status(200).json({ customer });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getHealthInfo = async (req, res, next) => {
+  try {
+    const healthInfo = await HealthInfo.findOne({ where: { customerId: req.user.id} });
+
+    if (!healthInfo) {
+      createError("Health information not found", 400);
+    }
+    res.status(201).json({ healthInfo });
   } catch (error) {
     next(error);
   }
@@ -28,21 +41,6 @@ exports.getCustomerById = async (req,res,next)=>{
     next(error)
   }
 }
-
-
-exports.getHealthInfo = async (req, res, next) => {
-  try {
-    const healthInfo = await HealthInfo.findOne({ where: { customerId: req.user.id} });
-
-    if (!healthInfo) {
-      createError("Health information not found", 400);
-    }
-
-    res.status(201).json({ healthInfo });
-  } catch (error) {
-    next(error);
-  }
-};
 exports.getHealthInfoById = async (req, res, next) => {
   try {
     const {customerId} = req.params
@@ -80,55 +78,21 @@ exports.updateHealthInfo = async (req, res, next) => {
   }
 };
 
-exports.addAddress = async (req, res, next) => {
-  try {
-    const { latitude, longitude } = req.body;
-    const address = await Address.create({
-      latitude,
-      longitude,
-      customerId: req.user.id,
-    });
-    if (!address) {
-      createError("faild to add the address", 400);
-    }
-
-    req.status(201).json({ address });
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.getAddresses = async (req, res, next) => {
-  try {
-    const address = await Address.findOne({
-      where: { customerId: req.user.id },
-    });
-    if (!address) {
-      createError("faild to get the address", 400);
-    }
-
-    req.status(201).json({ address });
-  } catch (error) {
-    next(error);
-  }
-};
 
 exports.updateAddress = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { latitude, longitude } = req.body;
-    const address = await Address.findOne({
-      where: { id, customerId: req.user.id },
+    const { address } = req.body;
+    const customer = await Customer.findOne({
+      where: { id: req.user.id },
     });
 
-    if (!address) {
-      createError("faild to get the address", 400);
+    if (!customer) {
+      createError("customer not found", 400);
     }
-    address.latitude = latitude;
-    address.longitude = longitude;
+    customer.address = address
 
-    address.save();
-    req.status(201).json({ address });
+    customer.save();
+    res.status(201).json({ newAddress: customer.address });
   } catch (error) {
     next(error);
   }

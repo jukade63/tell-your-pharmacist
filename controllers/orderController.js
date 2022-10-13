@@ -1,18 +1,20 @@
 const {
   Order,
   OrderDetail,
-  Product,
   Pharmacy,
   Customer,
 } = require("../models");
 const createError = require("../utils/createError");
 const sequelize = require("sequelize");
+const { Op } = require("sequelize");
 
-exports.getOrdersFromCustomer = async (req, res, next) => {
+exports.getOrders = async (req, res, next) => {
   try {
     const orders = await Order.findAll({
-      where: { customerId: req.user.id },
-      include: [{ model: Pharmacy }],
+      where: {
+        [Op.or]: [{ pharmacyId: req.user.id },{customerId: req.user.id}]
+      },
+      include: [{ model: Pharmacy }, {model: Customer}],
       order: [
         [
           sequelize.fn(
@@ -38,20 +40,20 @@ exports.getOrdersFromCustomer = async (req, res, next) => {
   }
 };
 
-exports.getOrdersFromPharmacy = async (req, res, next) => {
-  try {
-    const orders = await Order.findOne({
-      where: { pharmacyId: req.user.id },
-      include: [{ model: Customer }],
-    });
-    if (!orders) {
-      createError("order is not found", 400);
-    }
-    res.status(200).json({ orders });
-  } catch (error) {
-    next(error);
-  }
-};
+// exports.getOrdersFromPharmacy = async (req, res, next) => {
+//   try {
+//     const orders = await Order.findOne({
+//       where: { pharmacyId: req.user.id },
+//       include: [{ model: Customer }],
+//     });
+//     if (!orders) {
+//       createError("order is not found", 400);
+//     }
+//     res.status(200).json({ orders });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 exports.getOrderById = async (req,res,next)=>{
   try {

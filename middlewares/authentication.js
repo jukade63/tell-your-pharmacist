@@ -60,7 +60,7 @@ exports.pharmacyAuthentication = async (req, res, next) => {
     const pharmacy = await Pharmacy.findOne({
       where: { id: payload.id },
       attributes: {
-        exclude: ["password", "createdAt", "updatedAt"],
+        exclude: ["password"],
       },
     });
 
@@ -69,6 +69,7 @@ exports.pharmacyAuthentication = async (req, res, next) => {
     }
 
     req.user = pharmacy;
+    
     next();
   } catch (error) {
     next(error);
@@ -106,33 +107,3 @@ exports.customerAuthentication = async (req, res, next) => {
   }
 };
 
-exports.pharmacyAuthentication = async (req, res, next) => {
-  try {
-    const { authorization } = req.headers;
-    if (authorization === "" || !authorization.startsWith("Bearer")) {
-      createError("you are not authorized", 401);
-    }
-
-    const token = authorization.split(" ")[1];
-    if (token === "") {
-      createError("you are not authorized");
-    }
-
-    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    const pharmacy = await Pharmacy.findOne({
-      where: { id: payload.id },
-      attributes: {
-        exclude: ["password", "createdAt", "updatedAt"],
-      },
-    });
-
-    if (pharmacy === "") {
-      createError("you are not authorized", 401);
-    }
-
-    req.user = pharmacy;
-    next();
-  } catch (error) {
-    next(error);
-  }
-};

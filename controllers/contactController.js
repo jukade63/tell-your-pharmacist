@@ -2,16 +2,15 @@ const { Op } = require("sequelize");
 const { Contact, Pharmacy, Customer } = require("../models");
 const createError = require("../utils/createError");
 
-
 exports.getContacts = async (req, res, next) => {
   try {
     const { id } = req.user;
 
     const contacts = await Contact.findAll({
       where: {
-        [Op.or]: [{ pharmacyId: id },{customerId: id}]
+        [Op.or]: [{ pharmacyId: id }, { customerId: id }],
       },
-      include: [{ model: Customer }, {model: Pharmacy}],
+      include: [{ model: Customer }, { model: Pharmacy }],
     });
 
     if (!contacts) {
@@ -23,39 +22,26 @@ exports.getContacts = async (req, res, next) => {
     next(error);
   }
 };
-
-exports.getCustomerContacts = async (req, res, next) => {
+exports.getOneContact = async (req, res, next) => {
   try {
     const { id } = req.user;
+    const { contactId } = req.params;
 
-
-    const contacts = await Contact.findAll({
-      where: { pharmacyId: id },
-      include: [{ model: Customer }],
+    const contact = await Contact.findOne({
+      where: {
+        [Op.or]: [
+          { pharmacyId: id, customerId: contactId },
+          { customerId: id, pharmacyId: contactId },
+        ],
+      },
+      include: [{ model: Customer }, { model: Pharmacy }],
     });
 
-    if (!contacts) {
-      createError("not found any curtomers", 400);
+    if (!contact) {
+      createError("contacts not found", 400);
     }
 
-    res.status(200).json({ contacts });
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.getPharmacyContacts = async (req, res, next) => {
-
-  try {
-    const { id } = req.user;
-
-    const contacts = await Contact.findAll({ where: { customerId: id }, include: [{ model: Pharmacy }], });
-
-    if (!contacts) {
-      createError("not found any pharmacies", 400);
-    }
-
-    res.status(200).json({ contacts });
+    res.status(200).json({ contact });
   } catch (error) {
     next(error);
   }

@@ -1,31 +1,32 @@
-const { upload } = require('../middlewares/upload')
-const express = require('express')
+const { upload } = require("../middlewares/upload");
+const express = require("express");
 const {
-  addOpeningTime,
-  updateOpeningTime,
   updatePharmacy,
   updatePictures,
   getAllpharmacies,
-  getPharmacy,
   getMe,
-} = require('../controllers/pharmacyController')
-const { pharmacyAuthentication } = require('../middlewares/authentication')
-const router = express.Router()
+  getPharmacyById,
+  updateIsOpen,
+} = require("../controllers/pharmacyController");
+const {
+  pharmacyAuthentication,
+  userAuthentication,
+} = require("../middlewares/authentication");
+const router = express.Router();
 
+router.get("/", userAuthentication, getMe);
+router.put("/", pharmacyAuthentication, updatePharmacy);
 router.patch(
-  '/upload',
+  "/upload",
   pharmacyAuthentication,
   upload.fields([
-    { name: 'profilePic', maxCount: 1 },
-    { name: 'coverPhoto', maxCount: 1 },
+    { name: "profilePic", maxCount: 1 },
+    { name: "coverPhoto", maxCount: 1 },
   ]),
   updatePictures
-)
+);
+router.patch("/isOpen/update", pharmacyAuthentication, updateIsOpen);
+router.get("/:lat/:lng", userAuthentication, getAllpharmacies);
+router.get("/:id", userAuthentication, getPharmacyById);
 
-router.get('/:lat/:lng', getAllpharmacies)
-router.get('/:id', getPharmacy)
-router.put('/', pharmacyAuthentication, updatePharmacy)
-router.post('/openingTime', pharmacyAuthentication, addOpeningTime)
-router.put('/openingTime', pharmacyAuthentication, updateOpeningTime)
-
-module.exports = router
+module.exports = router;
