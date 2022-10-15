@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { usePharmacy } from '../../contexts/PharmacyContext'
 import axios from '../../config/axios'
 import { useState } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
 import { useCustomer } from '../../contexts/CustomerContext'
 
 function FindPharmacies() {
@@ -30,10 +29,13 @@ function FindPharmacies() {
     }
   }
 
+  useEffect(()=>{
+    getUserLocation()
+  }, [lat, lng])
+
   const handleFindPharmacies = async () => {
     try {
       if(!customer) navigate('/login')
-      getUserLocation()
       if (lat && lng) {
         const result = await axios.get(`/pharmacies/${lat}/${lng}`)
         setPharmacies(result.data.pharmacies)
