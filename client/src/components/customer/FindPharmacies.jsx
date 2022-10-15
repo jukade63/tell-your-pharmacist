@@ -2,7 +2,7 @@ import { Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { usePharmacy } from '../../contexts/PharmacyContext'
 import axios from '../../config/axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCustomer } from '../../contexts/CustomerContext'
 
 function FindPharmacies() {
