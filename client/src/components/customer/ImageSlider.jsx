@@ -46,7 +46,7 @@ function ImageSlider() {
         autoPlayInterval='2000'
         disableButtonsControls
         animationDuration='2000'
-        // infinite
+        infinite
       >
         {slides.map((slide, index) => (
           <div style={slideContainerStyle} key={index}>

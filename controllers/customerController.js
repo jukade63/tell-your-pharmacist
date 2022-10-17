@@ -68,7 +68,7 @@ exports.updateHealthInfo = async (req, res, next) => {
     healthInfo.height = height;
     healthInfo.allergy = allergy;
     healthInfo.diseases = diseases;
-    healthInfo.medication = medication;
+    healthInfo.medications = medication;
 
     healthInfo.save();
 

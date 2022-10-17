@@ -1,13 +1,12 @@
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack} from '@mui/material'
 import { useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import Input from './Input'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import BasicSnackbar from './BasicSnackbar'
 
 function LoginForm({ endpoint, toHome, toSignup }) {
   const navigate = useNavigate()
-  const location = useLocation()
   const {login} = useAuth()
   const [phoneNumber, setPhoneNumber] = useState('')
   const [password, setPassword] = useState('')
@@ -68,14 +67,6 @@ function LoginForm({ endpoint, toHome, toSignup }) {
             สมัครใหม่
           </Button>
         </Stack>
-        <Typography
-          variant='body1'
-          textAlign='center'
-          mt={1}
-          sx={{ textDecoration: 'underline' }}
-        >
-          ลืมรหัสผ่าน
-        </Typography>
       </Box>
     </>
   )
