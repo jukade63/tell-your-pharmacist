@@ -27,40 +27,45 @@ function StoreInfo() {
   const theme = useTheme();
   const { id, distance } = useParams();
   const [pharmacy, setPharmacy] = useState({});
-  const {reviews, getReviews, getPharmacyById} = usePharmacy()
+  const { reviews, getReviews, getPharmacyById, getOpeningTimeByPharmacy } = usePharmacy();
   const { addContact, setIncomingMsg } = useContact();
   const [address, setAddress] = useState("");
-  
+  const [openingTime, setOpeningTime] = useState({})
+
   const fetchPharmacy = async () => {
     const { data } = await getPharmacyById(id);
     reverseGeocode(data.pharmacy.latitude, data.pharmacy.longitude, setAddress);
     setPharmacy(data.pharmacy);
   };
-  
-  useEffect(() => { 
-    fetchPharmacy();
-    getReviews(id)
-  }, [id]);
-  
-  const ratingAve = reviews?.reduce((acc, el)=>{
-    acc += el.star/reviews.length
-    return acc
-  }, 0)
 
+  const fetchOpeningTime = async () => {
+    const res = await getOpeningTimeByPharmacy(id)
+    setOpeningTime(res.data.openingTime)
+  }
+
+  useEffect(() => {
+    fetchPharmacy();
+    fetchOpeningTime()
+    getReviews(id);
+  }, [id]);
+
+  const ratingAve = reviews?.reduce((acc, el) => {
+    acc += el.star / reviews.length;
+    return acc;
+  }, 0);
 
   const renderedSwitchIcon = pharmacy?.isOpen ? (
-    <ToggleOnIcon color="success" fontSize='large' />
+    <ToggleOnIcon color="success" fontSize="large" />
   ) : (
-    <ToggleOffIcon color="disabled" fontSize='large'/>
+    <ToggleOffIcon color="disabled" fontSize="large" />
   );
-
 
   return (
     <>
       <PageTitle title="ข้อมูลร้านยา" toPage="/" />
       <Stack justifyContent="center" height="740px">
         <Paper elevation={2}>
-          <Stack spacing={1} alignItems="center">
+          <Stack spacing={1.5} alignItems="center">
             <Box
               sx={{
                 background: theme.palette.secondary.main,
@@ -70,7 +75,9 @@ function StoreInfo() {
                 textAlign: "center",
               }}
             >
-              <Typography variant="subtitle3">{pharmacy.storeName}</Typography>
+              <Typography variant="h3" color="white">
+                {pharmacy.storeName}
+              </Typography>
             </Box>
             <Avatar
               src={pharmacy.profilePic}
@@ -78,10 +85,12 @@ function StoreInfo() {
               width="100px"
               sx={{ width: 75, height: 75 }}
             />
-            <Typography variant="subtitle1">เภสัชกร</Typography>
-            <Typography variant="subtitle2" color="primary">
-              {`${pharmacy.firstName} ${pharmacy.lastName}`}
-            </Typography>
+            <Box sx={{textAlign:'center'}}>
+              <Typography variant="subtitle2">เภสัชกร</Typography>
+              <Typography variant="subtitle2" color="primary">
+                {`${pharmacy.firstName} ${pharmacy.lastName}`}
+              </Typography>
+            </Box>
           </Stack>
           <Divider sx={{ my: 1 }} />
           {pharmacy && (
@@ -112,23 +121,28 @@ function StoreInfo() {
                 </Typography>
                 <Link to={`/reviews/${id}`}>
                   <Button>
-                    <Rating readOnly size="small" value={ratingAve} precision={0.5} />
+                    <Rating
+                      readOnly
+                      size="small"
+                      value={ratingAve}
+                      precision={0.5}
+                    />
                   </Button>
                 </Link>
               </Stack>
             )}
-            
+
             <Stack>
               {renderedSwitchIcon} {pharmacy?.isOpen ? "เปิด" : "ปิด"}
             </Stack>
             <Stack spacing={1} pb={1} alignItems="center">
               <Typography variant="subtitle2">เวลาปฏิบัติการ</Typography>
               <AccessTimeIcon />
-              <Typography variant="subtitle2" fontWeight="600" color="#A83A7F">
-                จันทร์ - ศุกร์
+              <Typography variant="body2" fontWeight="600" color="#A83A7F">
+                {openingTime.dayStart} - {openingTime.dayEnd}
               </Typography>
-              <Typography variant="subtitle2" fontWeight="600" color="#A83A7F">
-                08.00 - 20.00 น.
+              <Typography variant="body2" fontWeight="600" color="#A83A7F">
+                {openingTime.timeStart?.slice(0,5)} - {openingTime.timeEnd?.slice(0,5)}
               </Typography>
             </Stack>
           </Stack>
@@ -142,7 +156,7 @@ function StoreInfo() {
               setIncomingMsg(true);
             }}
           >
-            คุยกับเภสัชกร
+            ปรึกษาเภสัชกร
           </Button>
         </Box>
       </Stack>
