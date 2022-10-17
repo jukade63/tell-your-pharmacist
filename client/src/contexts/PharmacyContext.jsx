@@ -32,7 +32,9 @@ function PharmacyContextProvider({ children }) {
   const fetchOpeningTime = async () =>{
     const res = await axios.get('/openingTime')
     setOpenTime(res.data.openingTime)
-    console.log(res.data.openingTime);
+  }
+  const getOpeningTimeByPharmacy = (pharmacyId) =>{
+    return axios.get(`/openingTime/${pharmacyId}`)
   }
 
   const updateOpeningTime = (value) => {
@@ -67,7 +69,8 @@ function PharmacyContextProvider({ children }) {
         updateOpeningTime,
         openTime,
         updateIsOpen,
-        reviews
+        reviews,
+        getOpeningTimeByPharmacy
       }}
     >
       {children}

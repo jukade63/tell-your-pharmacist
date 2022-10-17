@@ -104,6 +104,21 @@ exports.getOpeningTime = async (req, res, next) => {
     next();
   }
 };
+exports.getOpeningTimeByPharmacyId = async (req, res, next) => {
+  try {
+    const openingTime = await OpeningTime.findOne({
+      where: { pharmacyId: req.params.pharmacyId },
+    });
+
+    if (!openingTime) {
+      createError("opening time not found");
+    }
+    openingTime.save();
+    res.status(200).json({ openingTime });
+  } catch (error) {
+    next();
+  }
+};
 
 exports.updatePharmacy = async (req, res, next) => {
   try {
