@@ -5,13 +5,13 @@ import axios from '../../config/axios'
 import { useEffect, useState } from 'react'
 import { useCustomer } from '../../contexts/CustomerContext'
 
-function FindPharmacies() {
+function FindPharmacies({setLoading}) {
   const navigate = useNavigate()
   const {customer} = useCustomer()
   const { setPharmacies } = usePharmacy()
   const [lat, setLat] = useState('')
   const [lng, setLng] = useState('')
-
+ 
   const getUserLocation = () => {
     const success = ({ coords }) => {
       setLat(coords.latitude)
@@ -20,7 +20,7 @@ function FindPharmacies() {
 
     const error = (err) => {
       if (err.message === 'User denied Geolocation') {
-        alert('Location permisson is necessary')
+        alert('Allow app to access location')
         location.reload()
       }
     }
@@ -37,6 +37,7 @@ function FindPharmacies() {
     try {
       if(!customer) navigate('/login')
       if (lat && lng) {
+        setLoading(true)
         const result = await axios.get(`/pharmacies/${lat}/${lng}`)
         setPharmacies(result.data.pharmacies)
         console.log(lat);
@@ -45,6 +46,8 @@ function FindPharmacies() {
       }
     } catch (error) {
       console.log(error)
+    } finally{
+      setLoading(false)
     }
   }
 

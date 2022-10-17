@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../components/common/Header";
 import NavigationBox from "../../components/common/NavigationBox";
 import FindPharmacies from "../../components/customer/FindPharmacies";
@@ -9,11 +9,13 @@ import { useCustomer } from "../../contexts/CustomerContext";
 import { getAccessToken } from "../../services/localStorage";
 import axios from '../../config/axios'
 import { useContact } from "../../contexts/ContactContext";
+import LinearProgress from '@mui/material/LinearProgress'
 
 function Home() {
   const { setCustomer, fetchCustomer, customer } = useCustomer();
   const { setUser } = useAuth();
   const {getContacts, contactList} = useContact()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchMe = async () => {
@@ -38,8 +40,9 @@ function Home() {
       {customer && (
         <Header toProfile="/profile" path="" setUser={setCustomer} />
       )}
+      {loading && <LinearProgress color="secondary"/>}
       <GridHero />
-      <FindPharmacies />
+      <FindPharmacies setLoading={setLoading}/>
       <ServiceStepper />
       <NavigationBox toHome="/" toChat="/contacts" toSetting="/profile" />
     </div>
