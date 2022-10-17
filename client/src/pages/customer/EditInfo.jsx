@@ -14,7 +14,7 @@ function EditInfo() {
   const [height, setHeight] = useState("");
   const [allergy, setAllergy] = useState("");
   const [diseases, setDiseases] = useState("");
-  const [medication, setMedication] = useState("");
+  const [medications, setMedications] = useState("");
 
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ function EditInfo() {
       setHeight(info.height);
       setAllergy(info.allergy);
       setDiseases(info.diseases);
-      setMedication(info.medication);
+      setMedications(info.medications);
       setEmail(user.email);
     };
     fetctInfo();
@@ -37,7 +37,7 @@ function EditInfo() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      await updateInfo({age, weight, height, allergy, medication, diseases});
+      await updateInfo({age, weight, height, allergy, medications, diseases});
     } catch (error) {
       console.log(error);
     }
@@ -128,13 +128,13 @@ function EditInfo() {
             id="diseases"
             onChange={(e) => setDiseases(e.target.value)}
           />
-          <label htmlFor="medication">ยา/อาหารเสริมที่ทานเป็นประจำ</label>
+          <label htmlFor="medications">ยา/อาหารเสริมที่ทานเป็นประจำ</label>
           <input
             className="form-input"
-            value={medication}
-            id="medication"
+            value={medications}
+            id="medications"
             onChange={(e) => {
-              setMedication(e.target.value);
+              setMedications(e.target.value);
             }}
           />
         </>
