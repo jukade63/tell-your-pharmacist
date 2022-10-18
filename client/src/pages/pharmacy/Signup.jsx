@@ -1,166 +1,200 @@
-import { Alert, Box, Button } from '@mui/material'
-import Input from '../../components/common/Input'
-import { AuthContext } from '../../contexts/AuthContext'
-import PageTitle from '../../components/common/PageTitle'
-import { useNavigate } from 'react-router-dom'
-import { useContext, useState, useEffect } from 'react'
-import { validate } from '../../helpers/validations/pharmacyValidation'
-import { reverseGeocode } from '../../services/reverseGeocode'
+import { Alert, Box, Button, Typography } from "@mui/material";
+import Input from "../../components/common/Input";
+import { AuthContext } from "../../contexts/AuthContext";
+import PageTitle from "../../components/common/PageTitle";
+import { useNavigate } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
+import { validate } from "../../helpers/validations/pharmacyValidation";
+import { reverseGeocode } from "../../services/reverseGeocode";
 
 function Signup() {
-  const { signup} = useContext(AuthContext)
-  const navigate = useNavigate()
+  const { signup } = useContext(AuthContext);
+  const navigate = useNavigate();
   const initialValues = {
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    email: '',
-    storeName: '',
-    password: '',
-    confirmPassword: '',
-  }
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    email: "",
+    storeName: "",
+    password: "",
+    confirmPassword: "",
+  };
 
-  const [getLatLng, setGetLatLng] = useState({ latitude: '', longitude: '' })
-  const [formValues, setFormValues] = useState(initialValues)
-  const [formErrors, setFormErrors] = useState({})
-  const [submitError, setSubmitError] = useState('')
-  const [isSubmit, setIsSubmit] = useState(false)
-  const [addressValue, setAddressValue] = useState('')
-
+  const [getLatLng, setGetLatLng] = useState({ latitude: "", longitude: "" });
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [addressValue, setAddressValue] = useState("");
+  
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormValues({ ...formValues, [name]: value })
-  }
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     try {
-      e.preventDefault()
-      setFormErrors(validate({ ...formValues, ...getLatLng }))
-      setIsSubmit(true)
+      e.preventDefault();
+      setFormErrors(validate({ ...formValues, ...getLatLng }));
+      setIsSubmit(true);
       setSubmitError('')
-      await signup('pharmacyAuth', { ...formValues, ...getLatLng })
-      navigate('/pharmacy/login')
+      await signup("pharmacyAuth", { ...formValues, ...getLatLng });
+      navigate("/pharmacy/login");
     } catch (error) {
-      const errorMsg = error.response.data.message
-      setSubmitError(errorMsg)
-      setTimeout(() => {
-        setSubmitError('')
-      }, 3000);
+      const errMsg = error?.response?.data?.message;
+      if (errMsg === "User already registered") {
+        setSubmitError(errMsg);
+        setTimeout(() => {
+          setSubmitError("");
+        }, 3000);
+      } else return;
     }
-  }
+  };
 
   const handleGetLocation = () => {
     const showPosition = ({ coords }) => {
-      setGetLatLng({ latitude: coords.latitude, longitude: coords.longitude })
-      reverseGeocode(getLatLng.latitude, getLatLng.longitude, setAddressValue)
-      console.log(addressValue)
-    }
+      setGetLatLng({ latitude: coords.latitude, longitude: coords.longitude });
+      reverseGeocode(getLatLng.latitude, getLatLng.longitude, setAddressValue);
+      console.log(addressValue);
+    };
 
     const showError = (error) => {
-      if (error.message === 'User denied Geolocation') {
-        alert('Allow app to access your location')
-        location.reload()
+      if (error.message === "User denied Geolocation") {
+        alert("Allow app to access your location");
+        location.reload();
       }
-    }
+    };
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition, showError)
+      navigator.geolocation.getCurrentPosition(showPosition, showError);
     }
-  }
+  };
 
   useEffect(() => {
-    handleGetLocation()
-  }, [])
+    handleGetLocation();
+  }, [addressValue]);
 
   useEffect(() => {
-    console.log(formErrors)
-    if (Object.keys(formErrors).length === 0 && submitError === '' && isSubmit) {
+    console.log(formErrors);
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
       handleSubmit()
     }
-  }, [submitError])
+  }, [submitError]);
 
   return (
     <div>
-      <PageTitle title='ลงทะเบียน' toPage='/pharmacy/login' />
-      {submitError && <Alert severity='error'>{submitError}</Alert>}
+      <PageTitle title="ลงทะเบียน" toPage="/pharmacy/login" />
+      {submitError && <Alert severity="error">{submitError}</Alert>}
       <Box
-        component='form'
-        autoComplete='off'
-        mt='10px'
-        mx='auto'
+        component="form"
+        autoComplete="off"
+        mt="10px"
+        mx="auto"
         maxWidth={600}
         onSubmit={handleSubmit}
       >
         <Input
-          label='ชื่อ'
-          helperText={formErrors.firstName}
-          name='firstName'
+          label="ชื่อ"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.firstName}
+            </Typography>
+          }
+          name="firstName"
           onChange={handleChange}
           value={formValues.firstName}
         />
         <Input
-          label='นามสกุล'
-          helperText={formErrors.lastName}
-          name='lastName'
+          label="นามสกุล"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.lastName}
+            </Typography>
+          }
+          name="lastName"
           onChange={handleChange}
           value={formValues.lastName}
         />
         <Input
-          label='เบอร์มือถือ'
-          helperText={formErrors.phoneNumber}
-          name='phoneNumber'
+          label="เบอร์มือถือ"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.phoneNumber}
+            </Typography>
+          }
+          name="phoneNumber"
           onChange={handleChange}
           value={formValues.phoneNumber}
         />
         <Input
-          label='อีเมล'
-          type='email'
-          helperText={formErrors.email}
-          name='email'
+          label="อีเมล"
+          type="email"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.email}
+            </Typography>
+          }
+          name="email"
           onChange={handleChange}
           value={formValues.email}
         />
         <Input
-          label='ชื่อร้าน'
-          helperText={formErrors.storeName}
-          name='storeName'
+          label="ชื่อร้าน"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.storeName}
+            </Typography>
+          }
+          name="storeName"
           onChange={handleChange}
           value={formValues.storeName}
         />
         <Input
-          label='ที่อยู่'
-          helperText={formErrors.latitude}
+          label="ที่อยู่"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.latitude}
+            </Typography>
+          }
           value={addressValue}
           onClick={handleGetLocation}
         />
         <Input
-          label='รหัสผ่าน'
-          type='password'
-          helperText={formErrors.password}
-          name='password'
+          label="รหัสผ่าน"
+          type="password"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.password}
+            </Typography>
+          }
+          name="password"
           onChange={handleChange}
           value={formValues.password}
         />
         <Input
-          label='ยืนยันรหัสผ่าน'
-          type='password'
-          helperText={formErrors.confirmPassword}
-          name='confirmPassword'
+          label="ยืนยันรหัสผ่าน"
+          type="password"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.confirmPassword}
+            </Typography>
+          }
+          name="confirmPassword"
           onChange={handleChange}
           value={formValues.confirmPassword}
         />
 
         <Button
-          variant='contained'
-          type='submit'
+          variant="contained"
+          type="submit"
           fullWidth
-          color='secondary'
-          sx={{ display: 'block', m: '15px auto 0 auto' }}
+          color="secondary"
+          sx={{ display: "block", m: "15px auto 0 auto" }}
         >
           ยืนยัน
         </Button>
       </Box>
     </div>
-  )
+  );
 }
 
-export default Signup
+export default Signup;

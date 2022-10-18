@@ -43,7 +43,7 @@ exports.signup = async (req, res, next) => {
     const existCustomer = await Customer.findOne({ where: { phoneNumber } });
 
     if (existCustomer) {
-      createError("already registered", 400);
+      createError("User already registered", 400);
     }
     if (!phoneNumber) {
       createError("phone number is required", 400);
@@ -53,7 +53,7 @@ exports.signup = async (req, res, next) => {
       createError("password is required", 400);
     }
     if (password !== confirmPassword) {
-      createError("password and confirm password is not matched", 400);
+      createError("password and confirm password not matched", 400);
     }
 
     const isMobilePhone = validator.isMobilePhone(phoneNumber + "");

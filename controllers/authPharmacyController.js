@@ -45,7 +45,7 @@ exports.signup = async (req, res, next) => {
     const existingPharmacy = await Pharmacy.findOne({ where: { phoneNumber } })
 
     if (existingPharmacy) {
-      createError('Phone number already in-use', 400)
+      createError('User already registered', 400)
     }
 
     if (!phoneNumber) {
