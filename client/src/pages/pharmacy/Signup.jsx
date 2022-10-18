@@ -37,13 +37,15 @@ function Signup() {
       e.preventDefault()
       setFormErrors(validate({ ...formValues, ...getLatLng }))
       setIsSubmit(true)
+      setSubmitError('')
       await signup('pharmacyAuth', { ...formValues, ...getLatLng })
+      navigate('/pharmacy/login')
     } catch (error) {
       const errorMsg = error.response.data.message
       setSubmitError(errorMsg)
       setTimeout(() => {
         setSubmitError('')
-      }, 2000);
+      }, 3000);
     }
   }
 
@@ -71,10 +73,10 @@ function Signup() {
 
   useEffect(() => {
     console.log(formErrors)
-    if (Object.keys(formErrors).length === 0 && submitError && isSubmit) {
-      navigate('/pharmacy/login')
+    if (Object.keys(formErrors).length === 0 && submitError === '' && isSubmit) {
+      handleSubmit()
     }
-  }, [formErrors])
+  }, [submitError])
 
   return (
     <div>

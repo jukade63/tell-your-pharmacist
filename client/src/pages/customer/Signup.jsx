@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Alert, Box, Button } from '@mui/material'
 import Input from '../../components/common/Input'
 import PageTitle from '../../components/common/PageTitle'
 import { validate } from '../../helpers/validations/customerValidation'
@@ -23,6 +23,7 @@ function Signup() {
   const [formValues, setFormValues] = useState(initialValues)
   const [formErrors, setFormErrors] = useState({})
   const [isSubmit, setIsSubmit] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -33,21 +34,29 @@ function Signup() {
     try {
       e.preventDefault()
       setFormErrors(validate(formValues))
+      setSubmitError('')
       setIsSubmit(true)
       await signup('customerAuth', formValues)
+      navigate('/login')
     } catch (error) {
-      console.log(error)
+      setSubmitError(error.response.data.message)
+      setTimeout(() => {
+        setSubmitError('')
+      }, 3000);
     }
   }
 
+  console.log(submitError);
   useEffect(() => {
     console.log(formErrors)
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-      navigate('/login')
+    if (Object.keys(formErrors).length === 0 && submitError === '' && isSubmit) {
+      handleSubmit()
     }
-  }, [formErrors])
+  }, [submitError])
+
   return (
     <div>
+      {submitError && <Alert severity='error'>{submitError}</Alert>}
       <PageTitle title='ลงทะเบียน' toPage='/login' />
       <Box
         component='form'
