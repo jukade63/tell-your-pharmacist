@@ -1,120 +1,160 @@
-import { Box, Button } from '@mui/material'
-import Input from '../../components/common/Input'
-import PageTitle from '../../components/common/PageTitle'
-import { validate } from '../../helpers/validations/customerValidation'
-import { useEffect, useState } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
-import { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Alert, Box, Button, Typography } from "@mui/material";
+import Input from "../../components/common/Input";
+import PageTitle from "../../components/common/PageTitle";
+import { validate } from "../../helpers/validations/customerValidation";
+import { useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const initialValues = {
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  }
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
 
-  const { signup } = useContext(AuthContext)
-  const navigate = useNavigate()
+  const { signup } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const [formValues, setFormValues] = useState(initialValues)
-  const [formErrors, setFormErrors] = useState({})
-  const [isSubmit, setIsSubmit] = useState(false)
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormValues({ ...formValues, [name]: value })
-  }
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     try {
-      e.preventDefault()
-      setFormErrors(validate(formValues))
-      setIsSubmit(true)
-      await signup('customerAuth', formValues)
+      e.preventDefault();
+      setFormErrors(validate(formValues));
+      setSubmitError("");
+      setIsSubmit(true);
+      await signup("customerAuth", formValues);
+      navigate("/login");
     } catch (error) {
-      console.log(error)
+      const errMsg = error?.response?.data?.message;
+      if (errMsg === "User already registered") {
+        setSubmitError(errMsg);
+        setTimeout(() => {
+          setSubmitError("");
+        }, 3000);
+      } else return;
     }
-  }
+  };
 
+  console.log(submitError);
   useEffect(() => {
-    console.log(formErrors)
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-      navigate('/login')
+    console.log(formErrors);
+    if (
+      Object.keys(formErrors).length === 0 &&
+      submitError === "" &&
+      isSubmit
+    ) {
+      handleSubmit();
     }
-  }, [formErrors])
+  }, [submitError]);
+
   return (
     <div>
-      <PageTitle title='ลงทะเบียน' toPage='/login' />
+      {submitError && <Alert severity="error">{submitError}</Alert>}
+      <PageTitle title="ลงทะเบียน" toPage="/login" />
       <Box
-        component='form'
-        autoComplete='off'
-        mt='10px'
-        mx='auto'
+        component="form"
+        autoComplete="off"
+        mt="10px"
+        mx="auto"
         maxWidth={600}
         onSubmit={handleSubmit}
       >
         <Input
-          label='ชื่อ'
-          helperText={formErrors.firstName}
-          name='firstName'
+          label="ชื่อ"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.firstName}
+            </Typography>
+          }
+          name="firstName"
           onChange={handleChange}
           value={formValues.firstName}
         />
         <Input
-          label='นามสกุล'
-          helperText={formErrors.lastName}
-          name='lastName'
+          label="นามสกุล"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.lastName}
+            </Typography>
+          }
+          name="lastName"
           onChange={handleChange}
           value={formValues.lastName}
         />
         <Input
-          label='เบอร์มือถือ'
-          helperText={formErrors.phoneNumber}
-          name='phoneNumber'
+          label="เบอร์มือถือ"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.phoneNumber}
+            </Typography>
+          }
+          name="phoneNumber"
           onChange={handleChange}
           value={formValues.phoneNumber}
         />
         <Input
-          label='อีเมล'
-          type='email'
-          helperText={formErrors.email}
-          name='email'
+          label="อีเมล"
+          type="email"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.email}
+            </Typography>
+          }
+          name="email"
           onChange={handleChange}
           value={formValues.email}
         />
         <Input
-          label='รหัสผ่าน'
-          type='password'
-          helperText={formErrors.password}
-          name='password'
+          label="รหัสผ่าน"
+          type="password"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.password}
+            </Typography>
+          }
+          name="password"
           onChange={handleChange}
           value={formValues.password}
         />
         <Input
-          label='ยืนยันรหัสผ่าน'
-          type='password'
-          helperText={formErrors.confirmPassword}
-          name='confirmPassword'
+          label="ยืนยันรหัสผ่าน"
+          type="password"
+          helperText={
+            <Typography color="error" variant="body2">
+              {formErrors.confirmPassword}
+            </Typography>
+          }
+          name="confirmPassword"
           onChange={handleChange}
           value={formValues.confirmPassword}
         />
 
         <Button
-          variant='contained'
-          type='submit'
+          variant="contained"
+          type="submit"
           fullWidth
-          color='secondary'
-          sx={{ display: 'block', m: '15px auto 0 auto' }}
+          color="secondary"
+          sx={{ display: "block", m: "15px auto 0 auto" }}
         >
           ยืนยัน
         </Button>
       </Box>
     </div>
-  )
+  );
 }
 
-export default Signup
+export default Signup;
