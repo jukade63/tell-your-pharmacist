@@ -30,8 +30,6 @@ import Settings from "./components/pharmacy/Settings";
 function App() {
   const { pharmacy } = usePharmacy();
   const { customer } = useCustomer();
-  const { user } = useAuth();
-  console.log(user);
 
   return (
     <>
