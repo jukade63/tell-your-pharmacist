@@ -113,7 +113,7 @@ function OrderDetail({path}) {
 
   return (
     <>
-      <PageTitle title='รายละเอียด' toPage={`${path}/orders`} />
+      {/* <PageTitle title='รายละเอียด' toPage={`${path}/orders`} /> */}
       <ReviewModal open={open} setOpen={setOpen} order={order} />
       <Paper sx={{ px: 1, py: 1.5 }}>
         <Stack my="auto" heigth="740px">
