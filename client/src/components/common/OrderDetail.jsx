@@ -14,10 +14,11 @@ import axios from "../../config/axios";
 import { useAuth } from "../../contexts/AuthContext";
 import { STRIPE_KEY } from "../../config/env";
 import ReviewModal from "./ReviewModal";
+import PageTitle from "./PageTitle";
 
 const KEY = STRIPE_KEY;
 
-function OrderDetail() {
+function OrderDetail({path}) {
   const {
     orderDetail,
     getOrderById,
@@ -112,6 +113,7 @@ function OrderDetail() {
 
   return (
     <>
+    <PageTitle title='รายละเอียดออเดอร์' toPage={`${path}/orders`}/>
       <ReviewModal open={open} setOpen={setOpen} order={order} />
       <Paper sx={{ px: 1, py: 1.5 }}>
         <Stack my="auto" heigth="740px">
