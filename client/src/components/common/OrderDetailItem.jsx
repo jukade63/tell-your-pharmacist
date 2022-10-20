@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 
-function OrderDetailCard({ Product, amount, price }) {
+function OrderDetailItem({ Product, amount, price }) {
   return (
     
       <Grid container alignItems="center" mb="5px">
@@ -21,4 +21,4 @@ function OrderDetailCard({ Product, amount, price }) {
   );
 }
 
-export default OrderDetailCard;
+export default OrderDetailItem;

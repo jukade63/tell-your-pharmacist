@@ -20,13 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     })
-    Contact.hasMany(models.Chat, {
-      foreignKey: {
-        name: 'contactId',
-        allowNull: false,
-      },
-      onDelete: 'CASCADE',
-    })
   }
 
   return Contact

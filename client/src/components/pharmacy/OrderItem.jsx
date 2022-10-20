@@ -6,9 +6,6 @@ import { useOrder } from "../../contexts/OrderContext";
 function OrderItem({ name, price, amount, productId }) {
   const { deleteItem } = useOrder();
 
-  console.log('productId',productId);
-  console.log('pName',name);
-
   return (
     <div>
       <Grid container alignItems="center" mb="5px" ml={1}>

@@ -31,7 +31,6 @@ function AuthContextProvider({ children }) {
       password,
     });
     setAccessToken(response.data.token);
-    // navigate(0)
     
   };
 

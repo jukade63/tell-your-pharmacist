@@ -7,7 +7,6 @@ const authCustomerRoute = require('./routes/authCustomerRoute')
 const authPharmacyRoute = require('./routes/authPharmacyRoute')
 const productRoute = require('./routes/productRoute')
 const contactRoute = require('./routes/contactRoute')
-const chatRoute = require('./routes/chatRoute')
 const orderRoute = require('./routes/orderRoute')
 const customerRoute = require('./routes/customerRoute')
 const pharmacyRoute = require('./routes/pharmacyRoute')
@@ -30,7 +29,6 @@ app.use("/customers", customerRoute);
 app.use("/pharmacies", pharmacyRoute);
 app.use("/orderDetails", orderDetailRoute);
 app.use("/contacts", contactRoute);
-app.use("/chats", chatRoute);
 app.use("/customerAuth", authCustomerRoute);
 app.use("/pharmacyAuth", authPharmacyRoute);
 app.use("/users", userRoute);

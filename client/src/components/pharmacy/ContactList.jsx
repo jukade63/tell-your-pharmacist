@@ -1,5 +1,4 @@
-import { Button, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Typography } from "@mui/material";
 import { useContact } from "../../contexts/ContactContext";
 import BasicMenu from "../common/BasicMenu";
 
@@ -12,8 +11,6 @@ function ContactList({ setSelectedContact }) {
       contactAddress: contact.Customer.address
     };
   });
-
-  console.log("mappedContact", mappedContacts);
 
   return (
     <div>
