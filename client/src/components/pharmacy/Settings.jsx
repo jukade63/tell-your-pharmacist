@@ -43,8 +43,6 @@ function Settings() {
     reverseGeocode(user?.latitude, user?.longitude, setAddress);
   }, []);
 
-  console.log(openTime);
-
   const handleSubmit = async (e) => {
     console.log(timeStartHour + ":" + timeStartMinute);
     console.log(timeEndHour + ":" + timeEndMinute);
@@ -63,7 +61,6 @@ function Settings() {
       });
       navigate("/pharmacy");
     } catch (err) {
-      console.log(err);
       setFormError(err.response.data.message);
       setTimeout(() => {
         setFormError("");

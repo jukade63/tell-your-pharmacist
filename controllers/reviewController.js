@@ -30,17 +30,3 @@ exports.getReviews = async (req, res, next) => {
   }
 };
 
-exports.getExistingReview = async (req, res, next) => {
-  try {
-    const { pharmacyId } = req.params;
-    const review = await Review.findOne({
-      where: { pharmacyId, customerId: req.user.id },
-    });
-    if (!review) {
-      createError("reviews not found", 400);
-    }
-    res.status(200).json({ review });
-  } catch (error) {
-    next(error);
-  }
-};

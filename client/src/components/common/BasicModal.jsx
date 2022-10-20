@@ -1,20 +1,14 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { Avatar, IconButton, Skeleton, Stack } from "@mui/material";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import { Avatar,Stack } from "@mui/material";
 import axios from "../../config/axios";
 import { useState } from "react";
-import { usePharmacy } from "../../contexts/PharmacyContext";
 
 const style = {
-  position: "absolute",
-  top: "25%",
-  left: "50%",
-  transform: "translate(-65%, -50%)",
-  width: 300,
+  width: 340,
+  height: 300,
   bgcolor: "background.paper",
   border: "1px solid #ddd",
   boxShadow: 24,

@@ -1,25 +1,24 @@
 import { useNavigate, useParams } from "react-router-dom";
-import OrderDetailCard from "./OrderDetailCard";
+import OrderDetailItem from "./OrderDetailItem";
 import { useOrder } from "../../contexts/OrderContext";
 import {
   Button,
   Divider,
   Paper,
-  Rating,
   Stack,
   Typography,
 } from "@mui/material";
-import Header from "./Header";
 import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import axios from "../../config/axios";
 import { useAuth } from "../../contexts/AuthContext";
 import { STRIPE_KEY } from "../../config/env";
 import ReviewModal from "./ReviewModal";
+import PageTitle from "./PageTitle";
 
 const KEY = STRIPE_KEY;
 
-function OrderDetail() {
+function OrderDetail({path}) {
   const {
     orderDetail,
     getOrderById,
@@ -47,7 +46,6 @@ function OrderDetail() {
   const fetchOrder = async () => {
     const res = await getOrderById(orderId);
     setOrder(res.data.order);
-    console.log("order", res.data.order);
   };
 
 
@@ -115,7 +113,7 @@ function OrderDetail() {
 
   return (
     <>
-      <Header toProfile="/profile" />
+      <PageTitle title='รายละเอียด' toPage={`${path}/orders`} />
       <ReviewModal open={open} setOpen={setOpen} order={order} />
       <Paper sx={{ px: 1, py: 1.5 }}>
         <Stack my="auto" heigth="740px">
@@ -132,11 +130,11 @@ function OrderDetail() {
             </Typography>
             <Typography sx={{ mt: 2 }}>รายการยา</Typography>
           </Stack>
-          <ol style={{ fontFamily: "IBM Plex Sans Thai" }}>
+          <ol>
             {orderDetail?.map((el) => {
               return (
-                <li style={{ fontFamily: "IBM Plex Sans Thai" }}>
-                  <OrderDetailCard key={el.id} {...el} />
+                <li >
+                  <OrderDetailItem key={el.id} {...el} />
                 </li>
               );
             })}

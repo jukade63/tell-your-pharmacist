@@ -46,7 +46,6 @@ function OrderList({contactId}) {
   };
 
   const handleCreateOrder = async () => {
-  console.log('seleceted', contactId);
     try {
       const orderObj = {
         customerId: contactId,

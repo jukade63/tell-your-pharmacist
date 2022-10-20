@@ -23,7 +23,6 @@ function InStockProducts() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  console.log(products);
   return (
     <>
       <TableContainer component={Paper} sx={{ mt: 1, mb: 0.5 }}>

@@ -1,10 +1,6 @@
 import {
-  Alert,
   Button,
-  Divider,
-  Menu,
   MenuItem,
-  Select,
   Stack,
   TextField,
   Typography,
@@ -32,7 +28,6 @@ function OrderInput() {
     setOpen(false);
   };
 
-  console.log(products);
 
   const addItem = () => {
     const existingItem = orderList.find((el) => el.name === newItem);
@@ -101,15 +96,6 @@ function OrderInput() {
             </>
           ))}
       </Stack>
-      {/* <Autocomplete
-        options={productOptions}
-        sx={{ width: 340, bgcolor: 'background.paper'}}
-        renderInput={(params) => <TextField {...params} label="ชื่อยา" />}
-        value={newItem}
-        onChange={(e) => setNewItem(e.target.value)}
-        getOptionLabel={(option) => option.name || ""}
-        freeSolo
-      /> */}
 
       <Stack
         direction="row"

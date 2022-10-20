@@ -4,7 +4,7 @@ import { useOrder } from "../../contexts/OrderContext";
 import OrderCard from "./OrderCard";
 
 function Orders({path}) {
-  const { getOrders, setOrders, orders } = useOrder();
+  const { getOrders, orders } = useOrder();
   const {user} = useAuth()
 
   useEffect(() => {

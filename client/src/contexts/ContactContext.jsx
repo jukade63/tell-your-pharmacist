@@ -12,7 +12,6 @@ function ContactContextProvider({ children }) {
   const [chat, setChat] = useState({})
   const [contactList, setContactList] = useState([]);
   const [incomingMsg, setIncomingMsg] = useState(false);
-  const { user } = useAuth();
   const navigate = useNavigate()
 
   const getContacts = async () => {

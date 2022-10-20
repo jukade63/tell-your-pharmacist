@@ -22,8 +22,6 @@ function StoreDetail({ openTime, isOpen }) {
 
   const label = checked ? "เปิด" : "ปิด";
 
-  console.log(checked);
-
   return (
     <Stack spacing={1} mt={1} p={1} alignItems="center">
       <Typography variant="subtitle2">เวลาปฏิบัติการ</Typography>

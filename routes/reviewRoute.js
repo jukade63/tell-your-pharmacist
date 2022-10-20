@@ -5,7 +5,6 @@ const router = express.Router()
 
 router.post('/', customerAuthentication, addReview)
 router.get('/:pharmacyId', userAuthentication, getReviews)
-router.get('/exist/:pharmacyId', userAuthentication, getExistingReview)
 
 module.exports = router
 

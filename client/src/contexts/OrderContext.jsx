@@ -2,7 +2,6 @@ import axios from "../config/axios";
 import React, { useState } from "react";
 import { useContext } from "react";
 import { createContext } from "react";
-import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const OrderContext = createContext();
@@ -63,8 +62,6 @@ function OrderContextProvider({ children }) {
   };
 
   const deleteItem = (id) => {
-    // console.log(id);
-    console.log(orderList);
     const newOrderList = orderList.filter((el) => {
       console.log(el);
       return el.productId !== id;
