@@ -15,7 +15,6 @@ import { useContact } from "../../contexts/ContactContext";
 export default function NavigationBox({ toHome, toChat, toSetting }) {
 
   const {incomingMsg, setIncomingMsg} = useContact()
-  // const [incomingMsg, setIncomingMsg] = React.useState(true);
 
 
   console.log(incomingMsg);
@@ -37,7 +36,8 @@ export default function NavigationBox({ toHome, toChat, toSetting }) {
         p: "2px 4px",
         position: "fixed",
         bottom: 0,
-        width: "345px",
+        width: "100%",
+        maxWidth: '575px'
       }}
     >
       <BottomNavigation

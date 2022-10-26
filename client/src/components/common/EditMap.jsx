@@ -37,7 +37,7 @@ function EditMap({center, location, setLocation, setAddress, height}) {
     <GoogleMap
           center={center}
           zoom={11}
-          mapContainerStyle={{ width: "347px", height: height }}
+          mapContainerStyle={{ width: "100%",maxWidth:'600px', height: height }}
           onClick={onMapClick}
           options={{
             zoomControl: true,

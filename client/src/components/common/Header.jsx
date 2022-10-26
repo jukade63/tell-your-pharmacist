@@ -14,7 +14,7 @@ function Header({ toProfile, path }) {
     logout(path);
   };
   return (
-    <Stack direction="row" justifyContent="space-between" mb={2}>
+    <Stack direction="row" justifyContent="space-between" mb={1}>
       <Link to={toProfile}>
         <IconButton>
           <AccountCircleIcon fontSize="large" />

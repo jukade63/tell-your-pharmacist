@@ -12,7 +12,7 @@ function HomeHeader({ firstName, lastName, storeName, profilePic}) {
       <IconButton onClick={() => setOpen(true)}>
         {profilePic ? (
           <Avatar
-            sx={{ width: 65, height: 65 }}
+            sx={{ width: 90, height: 90 }}
             src={profilePic} 
           ></Avatar>
         ) : (<Avatar sx={{ width: 60, height: 60 }}></Avatar>)}

@@ -35,7 +35,7 @@ function StoreMap({ center, pharmacies }) {
     <GoogleMap
       center={center}
       zoom={11}
-      mapContainerStyle={{ width: "347px", height: '360px' }}
+      mapContainerStyle={{ maxWidth: "600px", height: '360px' }}
       options={options}
       onLoad={onMapLoad}
     >

@@ -40,7 +40,9 @@ function ChatHeader() {
         alignItems: "center",
         position: "fixed",
         top: 0,
-        width: "345px",
+        borderRadius: 20,
+        mt: 1,
+        maxWidth: "345px",
         zIndex: 20,
       }}
     >
@@ -53,7 +55,7 @@ function ChatHeader() {
         <Avatar src={receiver?.profilePic} />
       </Badge>
       <Typography color="#eee">
-        {receiver?.storeName || receiver?.firstName}
+        {receiver?.storeName || `${receiver?.firstName} ${receiver?.lastName}`} 
       </Typography>
     </Paper>
   );

@@ -1,6 +1,4 @@
 import {
-  Box,
-  Button,
   Divider,
   IconButton,
   InputBase,
@@ -8,7 +6,6 @@ import {
   Stack,
 } from "@mui/material";
 import Message from "../../components/common/Message";
-import NavigationBox from "../../components/common/NavigationBox";
 import UploadIcon from "@mui/icons-material/Upload";
 import SendIcon from "@mui/icons-material/Send";
 import { useAuth } from "../../contexts/AuthContext";
@@ -94,6 +91,7 @@ function Chat() {
       media: url || "",
       unread: true,
     });
+    console.log(messages);
     setNewMessage("");
     setIncomingMsg(true)
     setImg(null);
@@ -119,7 +117,8 @@ function Chat() {
           alignItems: "center",
           position: "fixed",
           bottom: 0,
-          width: "345px",
+          width: '100%',
+          maxWidth: "575px",
         }}
         onSubmit={handleSubmit}
       >

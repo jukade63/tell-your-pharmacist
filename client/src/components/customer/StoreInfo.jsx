@@ -70,7 +70,7 @@ function StoreInfo() {
                 textAlign: "center",
               }}
             >
-              <Typography variant="subtitle3">{pharmacy.storeName}</Typography>
+              <Typography variant="subtitle1" color='white'>{pharmacy.storeName}</Typography>
             </Box>
             <Avatar
               src={pharmacy.profilePic}

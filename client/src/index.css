@@ -4,18 +4,23 @@
   font-family: "IBM Plex Sans Thai", "sans-serif";
 }
 
+* > * {
+  font-family: "IBM Plex Sans Thai", "sans-serif";
+  
+}
+
 #root {
-  width: 360px;
+  max-width: 600px;
   height: "auto";
   min-height: 740px;
-  margin: 0 auto 50px auto;
-  padding: 0.5em;
+  margin: 0 auto;
+  padding: 1em;
   background-color: #ebf0f4;
 }
 
-body {
-  margin: 0 auto 50px auto;
-}
+/* body {
+  margin: 0 auto;
+} */
 
 
 .form-input {

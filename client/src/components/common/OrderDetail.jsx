@@ -34,7 +34,6 @@ function OrderDetail() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-
   const total = orderDetail.reduce((acc, curr) => {
     acc += curr.price * curr.amount;
     return acc + +order?.deliveryFee;
@@ -50,11 +49,9 @@ function OrderDetail() {
     console.log("order", res.data.order);
   };
 
-
   useEffect(() => {
     fetchOrder();
   }, [orderId]);
-  
 
   useEffect(() => {
     const makeRequest = async () => {
@@ -104,8 +101,8 @@ function OrderDetail() {
         variant="contained"
         fullWidth
         onClick={() => {
-          updateOrderCompleted(orderId)
-          setOpen(true)
+          updateOrderCompleted(orderId);
+          setOpen(true);
         }}
       >
         ยืนยันรับออเดอร์
@@ -142,18 +139,25 @@ function OrderDetail() {
             })}
           </ol>
           {order.deliveryFee && (
-            <Typography>
-              ค่าส่ง{" "}
-              <span style={{ marginLeft: "250px" }}>
-                {(+order.deliveryFee).toFixed(2)}
-              </span>
-            </Typography>
+            <Stack
+              alignItems="center"
+              direction="row"
+              justifyContent="space-between"
+            >
+              <Typography>ค่าส่ง</Typography>
+              <Typography>{(+order.deliveryFee).toFixed(2)}</Typography>
+            </Stack>
           )}
           <Divider sx={{ my: 1 }} />
-          <Typography>
-            ทั้งหมด{" "}
-            <span style={{ marginLeft: "230px" }}>{total.toFixed(2)}</span>
-          </Typography>
+          <Stack
+            alignItems="center"
+            direction="row"
+            justifyContent="space-between"
+          >
+            <Typography>ทั้งหมด</Typography>
+            <Typography>{total.toFixed(2)}</Typography>
+          </Stack>
+
           <Divider sx={{ my: 1 }} />
           {renderedBtn}
         </Stack>
