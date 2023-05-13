@@ -1,0 +1,70 @@
+*, *::after, *::before  {
+  box-sizing: border-box;
+
+}
+
+html, body {
+  height: 100%;
+}
+
+#root{
+  max-width: 600px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 1em;
+  background-color: #ebf0f4;
+  font-family: 'Source Sans 3', sans-serif;
+
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 8px;
+  margin-bottom: 5px;
+  outline: none;
+  border: 1px solid #ccc;
+  background-color: "white";
+  
+}
+
+.disabled {
+  color: darkgray;
+}
+
+.select {
+  width: 100%;
+  padding: 5px 2px;
+}
+
+input, select {
+  border-radius: 4px;
+  color: #1C419A;
+}
+input:focus, select:focus {
+  border-radius: 4px;
+  outline: 2px solid #a83a7f;
+}
+
+.profile {
+  display: none;
+}
+.view-profile:hover {
+  display: inline-block;
+}
+
+.parent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.child {
+  position: absolute;
+  top: 10%;
+  left: 57%;
+  background-color: rgb(28, 123, 217);
+  padding: 2px 8px;
+  border-radius: 50px;
+  color: white;
+  font-size: 10px;
+}
+

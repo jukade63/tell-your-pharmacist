@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "jukade63",
+    "database": "tell_your_pharmacist",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "bd7ac5b15987ac",
+    "password": "fbfb7914",
+    "database": "heroku_50bf01f00b6607d",
+    "host": "eu-cdbr-west-03.cleardb.net",
+    "dialect": "mysql"
+  }
+}

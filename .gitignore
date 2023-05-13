@@ -1,0 +1,6 @@
+
+node_modules
+.env
+client/src/config
+client/src/node_modules
+
